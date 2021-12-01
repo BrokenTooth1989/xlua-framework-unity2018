@@ -1,3 +1,17 @@
+local util = require 'XLua.Common.util'
+local yield_return = (require 'XLua.Common.cs_coroutine').yield_return
+local BREAKINFOFUNC, XPCALLFUNC = require("LuaDebug")("localhost", 7008)
+print("--> fuck LuaDebug open @ port: 7008 ...")
+
+local co = coroutine.create(
+function()
+    while true do
+        yield_return(CS.UnityEngine.WaitForSeconds(0.1))
+        BREAKINFOFUNC()
+    end
+end)
+coroutine.resume(co)
+
 -- 全局模块
 require "Global.Global"
 	
@@ -26,7 +40,7 @@ end
 
 --主入口函数。从这里开始lua逻辑
 local function Start()
-	print("GameMain start...")
+	print("--> fuck GameMain start...")
 	
 	-- 模块启动
 	UpdateManager:GetInstance():Startup()

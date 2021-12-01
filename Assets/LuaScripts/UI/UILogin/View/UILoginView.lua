@@ -57,7 +57,7 @@ local function OnCreate(self)
 	--长按事件
 	self.press_Img=self:AddComponent(UIPointerLongPress, long_press_bg);
 	self.press_Img:SetOnClick(function()
-		print("click")
+		print("wha a fuck click")
 	end);
 	self.press_Img:SetOnPress(function()
 		print("long Press")
