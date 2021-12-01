@@ -1,11 +1,29 @@
-﻿using System;
-using System.Reflection;
-using UnityEngine;
-using System.Collections.Generic;
-using UnityEngine.UI;
-using XLua;
+﻿// tolua: CustomSettings.cs
+//  _GT(typeof(LuaValueInfo)),
+//  _GT(typeof(LuaDebugTool)),
+//
+// slua: #define SLUA
+//
+// xlua: #define XLUA
 
-[LuaCallCSharp]
+
+//#define SLUA
+#define XLUA
+using System;
+using System.Reflection;
+using System.Collections.Generic;
+
+#if SLUA
+using SLua;
+#elif XLUA 
+using XLua;
+#endif
+
+#if SLUA 
+[CustomLuaClass]
+#elif XLUA 
+[CSharpCallLua]
+#endif
 public class LuaValueInfo
 {
     public string name;
@@ -14,10 +32,14 @@ public class LuaValueInfo
     public bool isValue;
 }
 
-[LuaCallCSharp]
+#if SLUA 
+[CustomLuaClass]
+#elif XLUA 
+[CSharpCallLua]
+#endif
 public class LuaDebugTool
 {
-    static private bool checkIsValue(Type valueType)
+    private static bool checkIsValue(Type valueType)
     {
         var isValue = false;
         if (
@@ -48,12 +70,10 @@ public class LuaDebugTool
         return isValue;
     }
 
-    static public List<LuaValueInfo> getUserDataInfo(System.Object obj)
+    public static List<LuaValueInfo> getUserDataInfo(object obj)
     {
-
         Type t = obj.GetType();
         List<LuaValueInfo> values = new List<LuaValueInfo>();
-        //判断是否是数组
         if (t.IsArray)
         {
             Array array = (Array)obj;
@@ -88,17 +108,13 @@ public class LuaDebugTool
             }
             return values;
         }
-
-
         PropertyInfo[] pinfos = t.GetProperties(BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
         foreach (PropertyInfo pinfo in pinfos)
         {
             try
             {
-
                 var value = pinfo.GetValue(obj, null);
                 var valueType = value.GetType();
-
                 values.Add(new LuaValueInfo()
                 {
                     name = pinfo.Name,
@@ -106,9 +122,8 @@ public class LuaDebugTool
                     valueType = valueType.ToString(),
                     isValue = checkIsValue(valueType)
                 });
-
             }
-            catch (Exception e)
+            catch
             {
                 values.Add(new LuaValueInfo()
                 {
@@ -118,7 +133,6 @@ public class LuaDebugTool
                     isValue = false
                 });
             }
-
         }
         FieldInfo[] fields = t.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
         foreach (FieldInfo fi in fields)
@@ -150,13 +164,10 @@ public class LuaDebugTool
                     });
                 }
             }
-            catch (Exception e)
-            {
-                var d = e.ToString();
-            }
+            catch { }
         }
         return values;
     }
 
-
 }
+

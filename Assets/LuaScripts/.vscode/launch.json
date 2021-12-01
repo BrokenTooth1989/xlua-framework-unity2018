@@ -80,7 +80,7 @@
                 ".lua.txt",
                 ".bytes"
             ],
-            "port": 7008,
+            "port": 7003,
             "printType": 1
         },
         {
