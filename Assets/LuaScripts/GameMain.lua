@@ -1,7 +1,7 @@
 local util = require 'XLua.Common.util'
 local yield_return = (require 'XLua.Common.cs_coroutine').yield_return
-local BREAKINFOFUNC, XPCALLFUNC = require("LuaDebug")("localhost", 7008)
-print("--> fuck LuaDebug open @ port: 7008 ...")
+local BREAKINFOFUNC, XPCALLFUNC = require("LuaDebug")("localhost", 7003)
+print("--> fuck LuaDebug open @ port: 7003 ...")
 
 local co = coroutine.create(
 function()
